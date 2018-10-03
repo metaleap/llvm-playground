@@ -8,17 +8,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const llvmir = __importStar(require("../../../node-llvm-ir/src/llvmir"));
-const mod = new llvmir.Module("oh_my_mod");
-const main = new llvmir.Func("main", llvmir.Type.i32);
-mod.funcs.push(main);
-const entry = new llvmir.Block("entry");
-main.blocks.push(entry);
-const a_ptr = new llvmir.InstrAlloca(llvmir.Type.i32);
-entry.instrs.push(a_ptr, new llvmir.InstrStore(llvmir.Type.i32, 42, a_ptr.name));
-const b_ptr = new llvmir.InstrAlloca(llvmir.Type.i32);
-entry.instrs.push(b_ptr, new llvmir.InstrStore(llvmir.Type.i32, 23, b_ptr.name));
-const a_val = new llvmir.InstrLoad(llvmir.Type.i32, a_ptr.name);
-const b_val = new llvmir.InstrLoad(llvmir.Type.i32, b_ptr.name);
-const result = new llvmir.InstrAdd(llvmir.Type.i32, a_val.name, b_val.name);
-entry.instrs.push(a_val, b_val, result, new llvmir.InstrRet(llvmir.Type.i32, result.name));
-console.log(mod.srcIR());
+const lex = __importStar(require("./lex"));
+const tmp = llvmir.Type.i32;
+const src1 = `
+def fib(x)
+  if x < 3 then
+    1
+  else
+    fib(x-1)+fib(x-2)
+
+fib(40)
+`;
+const src2 = `
+extern sin(arg);
+extern cos(arg);
+extern atan2(arg1 arg2);
+
+atan2(sin(.4), cos(42))
+`;
+const src = (tmp !== llvmir.Type.i32) ? src1 : src2;
+for (const tok of lex.tokens(src))
+    console.log(tok.raw);

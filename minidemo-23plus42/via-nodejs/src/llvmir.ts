@@ -7,10 +7,8 @@
   any of their dependencies. yes, tried them all and yes, wasted precious hours..
 */
 
-var counter: number = 0
-
 export enum LlvmType {
-	"i32" = "i32"
+	i32 = "i32"
 }
 
 interface LlvmSyn {
@@ -33,12 +31,12 @@ export class LlvmModule implements LlvmSyn {
 export class LlvmFunc implements LlvmSyn {
 	constructor(
 		readonly name: string,
-		readonly retType: LlvmType,
+		readonly type: LlvmType,
 		readonly blocks: LlvmBlock[] = [],
 	) { }
 
 	srcIR = () =>
-		[`define ${this.retType} @${this.name}() {`].concat(
+		[`define ${this.type} @${this.name}() {`].concat(
 			this.blocks.map(block => block.srcIR()),
 			["}"],
 		).join("\n")
@@ -58,14 +56,13 @@ export class LlvmBlock implements LlvmSyn {
 
 interface LlvmInstr extends LlvmSyn { }
 
+var next: number = -1
+
 export class LlvmInstrAlloca implements LlvmInstr {
 	readonly name: number
 	constructor(
 		readonly type: LlvmType,
-	) {
-		this.name = counter
-		counter++
-	}
+	) { this.name = ++next }
 
 	srcIR = () =>
 		`%${this.name} = alloca ${this.type}`
@@ -76,9 +73,41 @@ export class LlvmInstrStore implements LlvmInstr {
 		readonly type: LlvmType,
 		readonly val: any,
 		readonly name: number,
-	) {
-	}
+	) { }
 
 	srcIR = () =>
 		`store ${this.type} ${this.val}, ${this.type}* %${this.name}`
+}
+
+export class LlvmInstrLoad implements LlvmInstr {
+	readonly name: number
+	constructor(
+		readonly type: LlvmType,
+		readonly fromName: number,
+	) { this.name = ++next }
+
+	srcIR = () =>
+		`%${this.name} = load ${this.type}, ${this.type}* %${this.fromName}`
+}
+
+export class LlvmInstrAdd implements LlvmInstr {
+	readonly name: number
+	constructor(
+		readonly type: LlvmType,
+		readonly nameL: number,
+		readonly nameR: number,
+	) { this.name = ++next }
+
+	srcIR = () =>
+		`%${this.name} = add ${this.type} %${this.nameL}, %${this.nameR}`
+}
+
+export class LlvmInstrRet implements LlvmInstr {
+	constructor(
+		readonly type: LlvmType,
+		readonly name: number,
+	) { }
+
+	srcIR = () =>
+		`ret ${this.type} %${this.name}`
 }

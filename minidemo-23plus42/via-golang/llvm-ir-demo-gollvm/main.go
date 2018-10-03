@@ -2,7 +2,7 @@ package main
 
 // based on http://felixangell.com/blog/an-introduction-to-llvm-in-go/
 
-// slow to rebuild: so a non-bindings equivalent is at ../llvm-ir-demo-llir/
+// painfully slow to (re)build, thx to CGO --- so a non-bindings equivalent is at: ../llvm-ir-demo-llir/
 
 import (
 	"llvm.org/llvm/bindings/go/llvm"

@@ -1,18 +1,4 @@
-import { LlvmModule, LlvmFunc, LlvmBlock, LlvmType, LlvmInstrAlloca, LlvmInstrStore } from "./llvmir"
-
-/*
-define i32 @main() {
-entry:
-	%0 = alloca i32
-	store i32 42, i32* %0
-	%1 = alloca i32
-	store i32 23, i32* %1
-	%2 = load i32, i32* %0
-	%3 = load i32, i32* %1
-	%4 = add i32 %2, %3
-	ret i32 %4
-}
-*/
+import { LlvmModule, LlvmFunc, LlvmBlock, LlvmType, LlvmInstrAlloca, LlvmInstrStore, LlvmInstrLoad, LlvmInstrAdd, LlvmInstrRet } from "./llvmir"
 
 const mod = new LlvmModule("oh_my_mod")
 
@@ -37,5 +23,11 @@ entry.instrs.push(
 )
 
 // return a+b
+const a_val = new LlvmInstrLoad(LlvmType.i32, a_ptr.name)
+const b_val = new LlvmInstrLoad(LlvmType.i32, b_ptr.name)
+const result = new LlvmInstrAdd(LlvmType.i32, a_val.name, b_val.name)
+entry.instrs.push(
+    a_val, b_val, result, new LlvmInstrRet(LlvmType.i32, result.name),
+)
 
 console.log(mod.srcIR())

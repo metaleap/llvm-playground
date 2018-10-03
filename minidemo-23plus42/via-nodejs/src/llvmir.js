@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var counter = 0;
 var LlvmType;
 (function (LlvmType) {
     LlvmType["i32"] = "i32";
@@ -15,11 +14,11 @@ class LlvmModule {
 }
 exports.LlvmModule = LlvmModule;
 class LlvmFunc {
-    constructor(name, retType, blocks = []) {
+    constructor(name, type, blocks = []) {
         this.name = name;
-        this.retType = retType;
+        this.type = type;
         this.blocks = blocks;
-        this.srcIR = () => [`define ${this.retType} @${this.name}() {`].concat(this.blocks.map(block => block.srcIR()), ["}"]).join("\n");
+        this.srcIR = () => [`define ${this.type} @${this.name}() {`].concat(this.blocks.map(block => block.srcIR()), ["}"]).join("\n");
     }
 }
 exports.LlvmFunc = LlvmFunc;
@@ -31,12 +30,12 @@ class LlvmBlock {
     }
 }
 exports.LlvmBlock = LlvmBlock;
+var next = -1;
 class LlvmInstrAlloca {
     constructor(type) {
         this.type = type;
         this.srcIR = () => `%${this.name} = alloca ${this.type}`;
-        this.name = counter;
-        counter++;
+        this.name = ++next;
     }
 }
 exports.LlvmInstrAlloca = LlvmInstrAlloca;
@@ -49,3 +48,30 @@ class LlvmInstrStore {
     }
 }
 exports.LlvmInstrStore = LlvmInstrStore;
+class LlvmInstrLoad {
+    constructor(type, fromName) {
+        this.type = type;
+        this.fromName = fromName;
+        this.srcIR = () => `%${this.name} = load ${this.type}, ${this.type}* %${this.fromName}`;
+        this.name = ++next;
+    }
+}
+exports.LlvmInstrLoad = LlvmInstrLoad;
+class LlvmInstrAdd {
+    constructor(type, nameL, nameR) {
+        this.type = type;
+        this.nameL = nameL;
+        this.nameR = nameR;
+        this.srcIR = () => `%${this.name} = add ${this.type} %${this.nameL}, %${this.nameR}`;
+        this.name = ++next;
+    }
+}
+exports.LlvmInstrAdd = LlvmInstrAdd;
+class LlvmInstrRet {
+    constructor(type, name) {
+        this.type = type;
+        this.name = name;
+        this.srcIR = () => `ret ${this.type} %${this.name}`;
+    }
+}
+exports.LlvmInstrRet = LlvmInstrRet;

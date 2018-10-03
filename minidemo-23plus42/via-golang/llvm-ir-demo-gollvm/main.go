@@ -1,30 +1,26 @@
 package main
 
 // based on http://felixangell.com/blog/an-introduction-to-llvm-in-go/
-//
-// using the gollvm bindings costs much time, even on my 32GB-RAM top-of-the-line workstation:
-//
-// - `go get`-ing them (or following above-linked blogger's setup instructions),
-//   the `./build.sh` step took somewhere between 30-50 mins (didn't properly time)
-//
-// - every `go install` of your llvm-importing package (such as this one) --- even if `main()` only
-//   consists of `println(llvm.Version)` --- routinely took over 1m40s, negating Go's famous compile times
+
+// slow to rebuild: so a non-bindings equivalent is at ../llvm-ir-demo-llir/
 
 import (
 	"llvm.org/llvm/bindings/go/llvm"
 )
 
 func main() {
-	println("Last tested with LLVM 6.0.1,\n\tcurrent LLVM Go-bindings' version: " + llvm.Version + "\n~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=\n")
+	println("Last tested with LLVM 6.0.1,")
+	println("\tcurrent LLVM Go-bindings' version: " + llvm.Version)
+	println("~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=")
 
 	builder := llvm.NewBuilder()
 	defer builder.Dispose()
 	mod := llvm.NewModule("oh_my_mod")
-	// defer mod.Dispose() --- don't! will panic with "fatal error: unexpected signal during runtime execution"
+	// defer mod.Dispose() --- don't! will panic with "unexpected signal during runtime execution"
 
 	main_funcsig := llvm.FunctionType(llvm.Int32Type(), []llvm.Type{}, false)
 	llvm.AddFunction(mod, "main", main_funcsig)
-	main_block := llvm.AddBasicBlock(mod.NamedFunction("main"), "entry") // "entry": llvm-standard func-entry block name
+	main_block := llvm.AddBasicBlock(mod.NamedFunction("main"), "entry")
 	builder.SetInsertPoint(main_block, main_block.FirstInstruction())
 
 	// int32 a = 42

@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "checkJs": false,
+    "target": "es2018",
+    "lib": [
+      "es2018"
+    ],
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "sourceMap": false,
+    "newLine": "LF",
+    "noFallthroughCasesInSwitch": true,
+    "alwaysStrict": true,
+    "noEmitOnError": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "pretty": false
+  }
+}

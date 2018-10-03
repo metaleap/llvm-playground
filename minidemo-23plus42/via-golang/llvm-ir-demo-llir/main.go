@@ -1,6 +1,12 @@
 package main
 
+// same logic as ../llvm-ir-demo-gollvm BUT using `llir/llvm` instead of
+// the official Go bindings (which are insanely slow to `go get`, and ---being
+// CGo-heavy--- brutally slow down rebuild times of any importer packages)
+
 import (
+	"os"
+
 	"github.com/llir/llvm/ir"
 	"github.com/llir/llvm/ir/constant"
 	"github.com/llir/llvm/ir/types"
@@ -24,5 +30,6 @@ func main() {
 	b_val := block.NewLoad(b_ptr)
 	result := block.NewAdd(a_val, b_val)
 	block.NewRet(result)
-	println(mod.String())
+
+	os.Stdout.WriteString(mod.String())
 }

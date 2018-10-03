@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const llvmir_1 = require("./llvmir");
+const mod = new llvmir_1.LlvmModule("oh_my_mod");
+const main = new llvmir_1.LlvmFunc("main", llvmir_1.LlvmType.i32);
+mod.funcs.push(main);
+const entry = new llvmir_1.LlvmBlock("entry");
+main.blocks.push(entry);
+const a_ptr = new llvmir_1.LlvmInstrAlloca(llvmir_1.LlvmType.i32);
+entry.instrs.push(a_ptr, new llvmir_1.LlvmInstrStore(llvmir_1.LlvmType.i32, 42, a_ptr.name));
+const b_ptr = new llvmir_1.LlvmInstrAlloca(llvmir_1.LlvmType.i32);
+entry.instrs.push(b_ptr, new llvmir_1.LlvmInstrStore(llvmir_1.LlvmType.i32, 23, b_ptr.name));
+console.log(mod.srcIR());

@@ -1,24 +1,15 @@
-/*
-  why have our own, handcoded, vanishingly-tiny-subset-of LLVM-IR in here,
-  instead of using one of "the numerous llvm packages on offer in NPM"?
-
-  same reason as always in the Nodejs universe.. either they're bitrotted /
-  outdated / stale / abandoned / erroring-out-for-other-reasons themselves --- or
-  any of their dependencies. yes, tried them all and yes, wasted precious hours..
-*/
-
-export enum LlvmType {
+export enum Type {
     i32 = "i32"
 }
 
-interface LlvmSyn {
+interface Syn {
     srcIR(): string
 }
 
-export class LlvmModule implements LlvmSyn {
+export class Module implements Syn {
     constructor(
         readonly name: string,
-        readonly funcs: LlvmFunc[] = [],
+        readonly funcs: Func[] = [],
     ) { }
 
     srcIR = () =>
@@ -28,11 +19,11 @@ export class LlvmModule implements LlvmSyn {
         ).join("\n")
 }
 
-export class LlvmFunc implements LlvmSyn {
+export class Func implements Syn {
     constructor(
         readonly name: string,
-        readonly type: LlvmType,
-        readonly blocks: LlvmBlock[] = [],
+        readonly type: Type,
+        readonly blocks: Block[] = [],
     ) { }
 
     srcIR = () =>
@@ -42,10 +33,10 @@ export class LlvmFunc implements LlvmSyn {
         ).join("\n")
 }
 
-export class LlvmBlock implements LlvmSyn {
+export class Block implements Syn {
     constructor(
         readonly name: string,
-        readonly instrs: LlvmInstr[] = [],
+        readonly instrs: Instr[] = [],
     ) { }
 
     srcIR = () =>
@@ -54,23 +45,23 @@ export class LlvmBlock implements LlvmSyn {
         ).join("\n")
 }
 
-interface LlvmInstr extends LlvmSyn { }
+interface Instr extends Syn { }
 
 var next: number = -1
 
-export class LlvmInstrAlloca implements LlvmInstr {
+export class InstrAlloca implements Instr {
     readonly name: number
     constructor(
-        readonly type: LlvmType,
+        readonly type: Type,
     ) { this.name = ++next }
 
     srcIR = () =>
         `%${this.name} = alloca ${this.type}`
 }
 
-export class LlvmInstrStore implements LlvmInstr {
+export class InstrStore implements Instr {
     constructor(
-        readonly type: LlvmType,
+        readonly type: Type,
         readonly val: any,
         readonly name: number,
     ) { }
@@ -79,10 +70,10 @@ export class LlvmInstrStore implements LlvmInstr {
         `store ${this.type} ${this.val}, ${this.type}* %${this.name}`
 }
 
-export class LlvmInstrLoad implements LlvmInstr {
+export class InstrLoad implements Instr {
     readonly name: number
     constructor(
-        readonly type: LlvmType,
+        readonly type: Type,
         readonly fromName: number,
     ) { this.name = ++next }
 
@@ -90,10 +81,10 @@ export class LlvmInstrLoad implements LlvmInstr {
         `%${this.name} = load ${this.type}, ${this.type}* %${this.fromName}`
 }
 
-export class LlvmInstrAdd implements LlvmInstr {
+export class InstrAdd implements Instr {
     readonly name: number
     constructor(
-        readonly type: LlvmType,
+        readonly type: Type,
         readonly nameL: number,
         readonly nameR: number,
     ) { this.name = ++next }
@@ -102,9 +93,9 @@ export class LlvmInstrAdd implements LlvmInstr {
         `%${this.name} = add ${this.type} %${this.nameL}, %${this.nameR}`
 }
 
-export class LlvmInstrRet implements LlvmInstr {
+export class InstrRet implements Instr {
     constructor(
-        readonly type: LlvmType,
+        readonly type: Type,
         readonly name: number,
     ) { }
 

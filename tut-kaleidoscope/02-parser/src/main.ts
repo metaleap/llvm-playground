@@ -1,4 +1,4 @@
-import * as llvmir from "../../../node-llvm-ir/src/llvmir" // not used in 01-lexer but dropping this import would wreck the ./out/* dir structure (crikey, TS!)
+import * as llvmir from "../../../node-llvm-ir/src/llvmir" // not used in 02-parser but dropping this import would wreck the ./out/* dir structure (crikey, TS!)
 
 import * as lex from './lex'
 

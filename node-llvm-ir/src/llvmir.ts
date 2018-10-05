@@ -1,12 +1,13 @@
+
 export enum Type {
     i32 = "i32"
 }
 
-interface Syn {
+interface ISyn {
     srcIR(): string
 }
 
-export class Module implements Syn {
+export class Module implements ISyn {
     constructor(
         readonly name: string,
         readonly funcs: Func[] = [],
@@ -19,7 +20,7 @@ export class Module implements Syn {
         ).join("\n")
 }
 
-export class Func implements Syn {
+export class Func implements ISyn {
     constructor(
         readonly name: string,
         readonly type: Type,
@@ -33,10 +34,10 @@ export class Func implements Syn {
         ).join("\n")
 }
 
-export class Block implements Syn {
+export class Block implements ISyn {
     constructor(
         readonly name: string,
-        readonly instrs: Instr[] = [],
+        readonly instrs: IInstr[] = [],
     ) { }
 
     srcIR = () =>
@@ -45,11 +46,11 @@ export class Block implements Syn {
         ).join("\n")
 }
 
-interface Instr extends Syn { }
+interface IInstr extends ISyn { }
 
 var next: number = -1
 
-export class InstrAlloca implements Instr {
+export class InstrAlloca implements IInstr {
     readonly name: number
     constructor(
         readonly type: Type,
@@ -59,7 +60,7 @@ export class InstrAlloca implements Instr {
         `%${this.name} = alloca ${this.type}`
 }
 
-export class InstrStore implements Instr {
+export class InstrStore implements IInstr {
     constructor(
         readonly type: Type,
         readonly val: any,
@@ -70,7 +71,7 @@ export class InstrStore implements Instr {
         `store ${this.type} ${this.val}, ${this.type}* %${this.name}`
 }
 
-export class InstrLoad implements Instr {
+export class InstrLoad implements IInstr {
     readonly name: number
     constructor(
         readonly type: Type,
@@ -81,7 +82,7 @@ export class InstrLoad implements Instr {
         `%${this.name} = load ${this.type}, ${this.type}* %${this.fromName}`
 }
 
-export class InstrAdd implements Instr {
+export class InstrAdd implements IInstr {
     readonly name: number
     constructor(
         readonly type: Type,
@@ -93,7 +94,7 @@ export class InstrAdd implements Instr {
         `%${this.name} = add ${this.type} %${this.nameL}, %${this.nameR}`
 }
 
-export class InstrRet implements Instr {
+export class InstrRet implements IInstr {
     constructor(
         readonly type: Type,
         readonly name: number,

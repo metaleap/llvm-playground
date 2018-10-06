@@ -16,14 +16,16 @@ def fib(x)
   else
     fib(x-1)+fib(x-2)
 
-fib(40)
+def main()
+  fib(40)
 `;
 const src2 = `
-extern sin(arg);
-extern cos(arg);
-extern atan2(arg1 arg2);
+extern sin(arg)
+extern cos(arg)
+extern atan2(arg1 arg2)
 
-atan2(sin(.4), cos(42))
+def main()
+  atan2(sin(.4), cos(42))
 `;
 const srcs = [src1, src2, llvmir.Type.i32];
 const idx = (Math.random() * (srcs.length - 1)) | 0;

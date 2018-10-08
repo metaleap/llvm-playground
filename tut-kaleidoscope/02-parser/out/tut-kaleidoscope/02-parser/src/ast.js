@@ -4,7 +4,7 @@ class FuncType {
     constructor(name, args) {
         this.name = name;
         this.args = args;
-        this.src = () => this.name + " (" + this.args.join(" ") + ")";
+        this.src = () => this.name + "(" + this.args.join(" ") + ")";
     }
 }
 exports.FuncType = FuncType;
@@ -50,7 +50,16 @@ class Call {
     constructor(callee, args) {
         this.callee = callee;
         this.args = args;
-        this.src = () => this.callee.src() + "(" + this.args.map(arg => arg.src()).join(",") + ")";
+        this.src = () => this.callee.src() + "( " + this.args.map(arg => arg.src()).join(", ") + " )";
     }
 }
 exports.Call = Call;
+class If {
+    constructor(cond, then, otherwise) {
+        this.cond = cond;
+        this.then = then;
+        this.otherwise = otherwise;
+        this.src = () => "if " + this.cond.src() + " then " + this.then.src() + " else " + this.otherwise.src();
+    }
+}
+exports.If = If;

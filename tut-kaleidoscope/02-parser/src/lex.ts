@@ -21,7 +21,7 @@ export function tokens(src: string): Token[] {
         if (cur.raw) {
             if (!cur.type) {
                 cur.type = Type.Ident
-                if (cur.raw === 'def' || cur.raw === 'extern')
+                if (cur.raw === 'def' || cur.raw === 'extern' || cur.raw === 'if' || cur.raw === 'then' || cur.raw === 'else')
                     cur.type = Type.Keyword
                 else if (!isNaN(cur.lit = parseFloat(cur.raw)))
                     cur.type = Type.NumLit

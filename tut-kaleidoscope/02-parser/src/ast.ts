@@ -8,7 +8,7 @@ export class FuncType {
         readonly args: string[],
     ) { }
     src = () =>
-        this.name + " (" + this.args.join(" ") + ")"
+        this.name + "(" + this.args.join(" ") + ")"
 }
 
 export class FuncDef {
@@ -63,5 +63,15 @@ export class Call implements IExpr {
         readonly args: IExpr[],
     ) { }
     src = () =>
-        this.callee.src() + "(" + this.args.map(arg => arg.src()).join(",") + ")"
+        this.callee.src() + "( " + this.args.map(arg => arg.src()).join(", ") + " )"
+}
+
+export class If implements IExpr {
+    constructor(
+        readonly cond: IExpr,
+        readonly then: IExpr,
+        readonly otherwise: IExpr,
+    ) { }
+    src = () =>
+        "if " + this.cond.src() + " then " + this.then.src() + " else " + this.otherwise.src()
 }

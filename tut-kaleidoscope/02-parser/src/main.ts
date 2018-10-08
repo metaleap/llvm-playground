@@ -4,20 +4,20 @@ import * as lex from './lex'
 import * as parse from './parse'
 
 const src1 = `
+def main()
+    fib(40)
+
 def fib(x)
     if x < 3 then
         1
     else
         fib(x-1)+fib(x-2)
-
-def main()
-    fib(40)
 `
 
 const src2 = `
 extern sin(arg)
 extern cos(arg)
-extern atan2(arg1 arg2)
+extern atan2(arg1,arg2)
 
 def main()
     atan2(sin(.4), cos(42))

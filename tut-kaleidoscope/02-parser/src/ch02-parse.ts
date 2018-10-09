@@ -1,5 +1,5 @@
-import * as ast from './ast'
-import * as lex from './lex'
+import * as lex from './ch01-lex'
+import * as ast from './ch02-ast'
 
 export function topLevelDecls(toks: lex.Token[]): ast.ISyn[] {
     const toplevel: ast.ISyn[] = []

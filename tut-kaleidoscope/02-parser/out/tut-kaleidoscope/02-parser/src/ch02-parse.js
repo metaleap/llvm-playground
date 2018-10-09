@@ -7,8 +7,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ast = __importStar(require("./ast"));
-const lex = __importStar(require("./lex"));
+const lex = __importStar(require("./ch01-lex"));
+const ast = __importStar(require("./ch02-ast"));
 function topLevelDecls(toks) {
     const toplevel = [];
     let lastStart = 0;

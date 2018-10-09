@@ -1,7 +1,7 @@
 import * as llvmir from "../../../node-llvm-ir/src/llvmir" // not used in 02-parser but dropping this import would wreck the ./out/* dir structure (crikey, TS!)
 
-import * as lex from './lex'
-import * as parse from './parse'
+import * as lex from './ch01-lex'
+import * as parse from './ch02-parse'
 
 const src1 = `
 def main()

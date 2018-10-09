@@ -1,6 +1,6 @@
 import * as llvmir from "../../../node-llvm-ir/src/llvmir" // not used in 01-lexer but dropping this import would wreck the ./out/* dir structure (crikey, TS!)
 
-import * as lex from './lex'
+import * as lex from './ch01-lex'
 
 const src1 = `
 def fib(x)

@@ -8,8 +8,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const llvmir = __importStar(require("../../../node-llvm-ir/src/llvmir"));
-const lex = __importStar(require("./lex"));
-const parse = __importStar(require("./parse"));
+const lex = __importStar(require("./ch01-lex"));
+const parse = __importStar(require("./ch02-parse"));
 const src1 = `
 def main()
     fib(40)

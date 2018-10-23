@@ -3,7 +3,7 @@ export enum Type {
     i32 = "i32"
 }
 
-interface ISyn {
+export interface ISyn {
     srcIR(): string
 }
 
@@ -46,7 +46,27 @@ export class Block implements ISyn {
         ).join("\n")
 }
 
-interface IInstr extends ISyn { }
+export interface IValue extends ISyn { }
+
+export class Name implements IValue {
+    constructor(
+        readonly name: string,
+    ) { }
+
+    srcIR = () =>
+        this.name
+}
+
+export class ConstantFP implements IValue {
+    constructor(
+        readonly apFloat: number,
+    ) { }
+
+    srcIR = () =>
+        this.apFloat.toString()
+}
+
+export interface IInstr extends ISyn { }
 
 var next: number = -1
 
